@@ -12,7 +12,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
         [TestMethod]
         public void TestCalculateTransactionFeeShouldReturnCorrectValue()
         {
-            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "CIRCLE-K", TransactionAmount = 200 };
+            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "SEVEN", TransactionAmount = 200 };
 
             var result = TransactionFeeCalculator.CalculateTransactionFee(null);
             result.ShouldBe((decimal)0.00);

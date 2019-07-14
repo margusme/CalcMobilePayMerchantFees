@@ -24,6 +24,15 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
             result = TransactionMerchantClassifier.CalculateTransactionFeeByMerchant(transactionObject);
             result.ShouldBe((decimal)17.99);
 
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "Circle_K", TransactionAmount = 200 };
+
+            result = TransactionMerchantClassifier.CalculateTransactionFeeByMerchant(transactionObject);
+            result.ShouldBe((decimal)1.60);
+
+            transactionObject.TransactionAmount = 1999;
+            result = TransactionMerchantClassifier.CalculateTransactionFeeByMerchant(transactionObject);
+            result.ShouldBe((decimal)15.99);
+
             transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "Teli", TransactionAmount = 200 };
 
             result = TransactionMerchantClassifier.CalculateTransactionFeeByMerchant(transactionObject);

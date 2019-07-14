@@ -1,4 +1,6 @@
-﻿using CalcMobilePayMerchantFees.Models;
+﻿using System.Collections.Generic;
+using CalcMobilePayMerchantFees.Models;
+using CalcMobilePayMerchantFees.TransactionProcessing.Clients;
 
 namespace CalcMobilePayMerchantFees.TransactionProcessing
 {
@@ -8,10 +10,15 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
     public class TransactionMerchantClassifier
     {
         /// <summary>
+        /// Hold client-specific calculator objects
+        /// </summary>
+        protected static readonly List<TransactionFeeCalculator> TransactionFeeClientCalculators = new List<TransactionFeeCalculator>() { new TransactionFeeCalculatorTelia(), new TransactionFeeCalculatorCircleK() };
+
+        /// <summary>
         /// Method calculates payment transaction fee for the merchant
         /// </summary>
         /// <param name="transactionObject">Payment transaction object with merchant name</param>
-        /// <returns>Payment transaction fee for given merchant. At the moment returns the result for all payment transactions the same way</returns>
+        /// <returns>Payment transaction fee for given merchant.</returns>
         public static decimal CalculateTransactionFeeByMerchant(TransactionObject transactionObject)
         {
             if (transactionObject == null)
@@ -19,9 +26,12 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
                 return 0;
             }
 
-            if (transactionObject.MerchantName.ToUpper().Equals(TransactionFeeCalculatorTelia.MerchantName))
+            foreach (var transactionFeeClientCalculator in TransactionFeeClientCalculators)
             {
-                return TransactionFeeCalculatorTelia.CalculateTransactionFee(transactionObject);
+                if (transactionObject.MerchantName.ToUpper().Equals(transactionFeeClientCalculator.GetMerchantName()))
+                {
+                    return transactionFeeClientCalculator.CalculateTransactionObjectFee(transactionObject);
+                }
             }
 
             return TransactionFeeCalculator.CalculateTransactionFee(transactionObject);

@@ -11,10 +11,10 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         public static string MerchantName = "";
 
         /// <summary>
-        /// Returns payment transaction fee
+        /// Returns payment transaction fee. Static method
         /// </summary>
         /// <param name="transactionObject">Payment transaction object</param>
-        /// <returns>0.00 at the moment</returns>
+        /// <returns>1/100 of the transaction amount</returns>
         public static decimal CalculateTransactionFee(TransactionObject transactionObject)
         {
             if (transactionObject == null)
@@ -23,6 +23,21 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
             }
 
             return Math.Round((decimal)transactionObject.TransactionAmount / 100, 2);
+        }
+
+        /// <summary>
+        /// Returns payment transaction fee. Non-static method
+        /// </summary>
+        /// <param name="transactionObject">Payment transaction object</param>
+        /// <returns>1/100 of the transaction amount</returns>
+        public virtual decimal CalculateTransactionObjectFee(TransactionObject transactionObject)
+        {
+            return CalculateTransactionFee(transactionObject);
+        }
+
+        public virtual string GetMerchantName()
+        {
+            return MerchantName;
         }
     }
 }
