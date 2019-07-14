@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CalcMobilePayMerchantFees": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Temp"
+    }
+  }
+}
