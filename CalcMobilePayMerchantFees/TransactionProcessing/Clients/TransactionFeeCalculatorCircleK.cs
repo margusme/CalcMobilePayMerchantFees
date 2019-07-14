@@ -1,0 +1,31 @@
+﻿using CalcMobilePayMerchantFees.Models;
+using System;
+
+namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
+{
+    public class TransactionFeeCalculatorCircleK : TransactionFeeCalculator
+    {
+        public new static string MerchantName = "CIRCLE_K";
+
+        /// <summary>
+        /// Returns payment transaction fee. Non-static method
+        /// </summary>
+        /// <param name="transactionObject">Payment transaction object</param>
+        /// <returns>1/100 of transaction amount minus 20%</returns>
+        public override decimal CalculateTransactionObjectFee(TransactionObject transactionObject)
+        {
+            var baseTransactionFee = base.CalculateTransactionObjectFee(transactionObject);
+
+            return Math.Round(baseTransactionFee * (decimal)0.8, 2);
+        }
+
+        /// <summary>
+        /// Gets merchant name from static constant
+        /// </summary>
+        /// <returns></returns>
+        public override string GetMerchantName()
+        {
+            return MerchantName;
+        }
+    }
+}
