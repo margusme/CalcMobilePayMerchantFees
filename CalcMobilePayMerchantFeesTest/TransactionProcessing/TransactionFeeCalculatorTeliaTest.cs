@@ -7,7 +7,7 @@ using CalcMobilePayMerchantFees.TransactionProcessing;
 namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
 {
     [TestClass]
-    public class TransactionFeeCalculatorTest
+    public class TransactionFeeCalculatorTeliaTest
     {
         [TestMethod]
         public void TestCalculateTransactionFeeShouldReturnCorrectValue()
@@ -17,12 +17,12 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
             var result = TransactionFeeCalculator.CalculateTransactionFee(null);
             result.ShouldBe((decimal)0.00);
 
-            result = TransactionFeeCalculator.CalculateTransactionFee(transactionObject);
-            result.ShouldBe((decimal)2.00);
+            result = TransactionFeeCalculatorTelia.CalculateTransactionFee(transactionObject);
+            result.ShouldBe((decimal)1.80);
 
             transactionObject.TransactionAmount = 1999;
-            result = TransactionFeeCalculator.CalculateTransactionFee(transactionObject);
-            result.ShouldBe((decimal)19.99);
+            result = TransactionFeeCalculatorTelia.CalculateTransactionFee(transactionObject);
+            result.ShouldBe((decimal)17.99);
         }
     }
 }
