@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using CalcMobilePayMerchantFees.Models;
 using CalcMobilePayMerchantFees.TransactionProcessing.Clients;
 
@@ -13,6 +14,9 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         /// Hold client-specific calculator objects
         /// </summary>
         protected static readonly List<TransactionFeeCalculator> TransactionFeeClientCalculators = new List<TransactionFeeCalculator>() { new TransactionFeeCalculatorTelia(), new TransactionFeeCalculatorCircleK() };
+        protected static readonly TransactionFeeCalculator TypicalTransactionFeeCalculator = new TransactionFeeCalculator();
+
+        protected static Hashtable ClientMonthFirstOperations = new Hashtable();
 
         /// <summary>
         /// Method calculates payment transaction fee for the merchant
@@ -30,11 +34,11 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
             {
                 if (transactionObject.MerchantName.ToUpper().Equals(transactionFeeClientCalculator.GetMerchantName()))
                 {
-                    return transactionFeeClientCalculator.CalculateTransactionObjectFee(transactionObject);
+                    return transactionFeeClientCalculator.CalculateTransactionFee(transactionObject) + transactionFeeClientCalculator.CalculateAdditionalFirstDayFee(transactionObject);
                 }
             }
 
-            return TransactionFeeCalculator.CalculateTransactionFee(transactionObject);
+            return TypicalTransactionFeeCalculator.CalculateTransactionFee(transactionObject) + TypicalTransactionFeeCalculator.CalculateAdditionalFirstDayFee(transactionObject);
         }
     }
 }

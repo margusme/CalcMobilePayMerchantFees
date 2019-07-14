@@ -13,5 +13,14 @@ namespace CalcMobilePayMerchantFees.Models
         public string MerchantName { get; set; }
         public long TransactionAmount { get; set; }
         public decimal TransactionPercentageFee { get; set; }
+        public string GetKeyForFirstRecordInMonth
+        {
+            get
+            {
+                return MerchantName.ToUpper() + "_" +
+                       TransactionDate.Year + "_" +
+                       TransactionDate.Month;
+            }
+        }
     }
 }
