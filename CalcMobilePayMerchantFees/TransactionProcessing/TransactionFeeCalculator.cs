@@ -15,7 +15,7 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         /// <returns>0.00 at the moment</returns>
         public static decimal CalculateTransactionFee(TransactionObject transactionObject)
         {
-            return (decimal) 0.00;
+            return Math.Round((decimal)transactionObject.TransactionAmount / 100, 2);
         }
     }
 }
