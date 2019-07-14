@@ -59,7 +59,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionDestination
         {
             var loggerMock = new Mock<ICalcFeesLogger>();
             var writer = new TransactionString3ColumnWriter(loggerMock.Object);
-            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "Telia", TransactionPercentageFee = (decimal)2.00};
+            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "Telia", TransactionPercentageFee = 2.00m};
 
             var line = writer.WriteTransactionData(transactionObject);
             line.ShouldMatch("2018-01-01 Telia 2.00");

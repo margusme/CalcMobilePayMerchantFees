@@ -12,11 +12,11 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
         /// </summary>
         /// <param name="transactionObject">Payment transaction object</param>
         /// <returns>1/100 of transaction amount minus 20%</returns>
-        public override decimal CalculateTransactionObjectFee(TransactionObject transactionObject)
+        public override decimal CalculateTransactionFee(TransactionObject transactionObject)
         {
-            var baseTransactionFee = base.CalculateTransactionObjectFee(transactionObject);
+            var baseTransactionFee = base.CalculateTransactionFee(transactionObject);
 
-            return Math.Round(baseTransactionFee * (decimal)0.8, 2);
+            return Math.Round(baseTransactionFee * 0.8m, 2);
         }
 
         /// <summary>
