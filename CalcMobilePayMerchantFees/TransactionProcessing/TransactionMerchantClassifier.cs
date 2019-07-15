@@ -34,11 +34,11 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
             {
                 if (transactionObject.MerchantName.ToUpper().Equals(transactionFeeClientCalculator.GetMerchantName()))
                 {
-                    return transactionFeeClientCalculator.CalculateTransactionFee(transactionObject) + transactionFeeClientCalculator.CalculateAdditionalFirstDayFee(transactionObject);
+                    return transactionFeeClientCalculator.CalculateTotalTransactionFee(transactionObject);
                 }
             }
 
-            return TypicalTransactionFeeCalculator.CalculateTransactionFee(transactionObject) + TypicalTransactionFeeCalculator.CalculateAdditionalFirstDayFee(transactionObject);
+            return TypicalTransactionFeeCalculator.CalculateTotalTransactionFee(transactionObject);
         }
     }
 }

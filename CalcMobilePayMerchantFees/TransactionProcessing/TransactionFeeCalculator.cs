@@ -16,7 +16,7 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         protected static HashSet<string> ClientMonthFirstOperations = new HashSet<string>();
 
         /// <summary>
-        /// Returns payment transaction fee. Static method
+        /// Returns payment transaction fee. 
         /// </summary>
         /// <param name="transactionObject">Payment transaction object</param>
         /// <returns>1/100 of the transaction amount</returns>
@@ -42,6 +42,16 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         public virtual decimal CalculateAdditionalFirstDayFee(TransactionObject transactionObject)
         {
             return !MerchantHasTransactionsForMonth(transactionObject) && CalculateTransactionFee(transactionObject) > 0 ? InvoiceFixedFee : 0.00m;
+        }
+
+        /// <summary>
+        /// Returns payment transaction fee with additional charges for the first merchant transaction in month. 
+        /// </summary>
+        /// <param name="transactionObject">Payment transaction object</param>
+        /// <returns>1/100 of the transaction amount plus additional charges</returns>
+        public virtual decimal CalculateTotalTransactionFee(TransactionObject transactionObject)
+        {
+            return CalculateTransactionFee(transactionObject) + CalculateAdditionalFirstDayFee(transactionObject);
         }
 
         public virtual string GetMerchantName()
