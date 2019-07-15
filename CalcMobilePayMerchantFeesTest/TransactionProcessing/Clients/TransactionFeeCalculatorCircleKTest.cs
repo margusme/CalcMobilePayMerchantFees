@@ -50,5 +50,26 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
             result = calculator.CalculateAdditionalFirstDayFee(transactionObject);
             result.ShouldBe(0.00m);
         }
+
+        [TestMethod]
+        public void TestCalculateTotalTransactionFeeShouldReturnCorrectValue()
+        {
+            var calculator = new TransactionFeeCalculatorCircleK();
+
+            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 5, 1), MerchantName = "Circle_K", TransactionAmount = 0 };
+
+            var result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(0.00m);
+
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 10, 1), MerchantName = "Circle_K", TransactionAmount = 200 };
+
+            result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(30.60m);
+
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 10, 1), MerchantName = "Circle_K", TransactionAmount = 200 };
+
+            result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(1.60m);
+        }
     }
 }
