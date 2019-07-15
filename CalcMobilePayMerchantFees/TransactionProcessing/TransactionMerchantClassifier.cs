@@ -16,8 +16,6 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         protected static readonly List<TransactionFeeCalculator> TransactionFeeClientCalculators = new List<TransactionFeeCalculator>() { new TransactionFeeCalculatorTelia(), new TransactionFeeCalculatorCircleK() };
         protected static readonly TransactionFeeCalculator TypicalTransactionFeeCalculator = new TransactionFeeCalculator();
 
-        protected static Hashtable ClientMonthFirstOperations = new Hashtable();
-
         /// <summary>
         /// Method calculates payment transaction fee for the merchant
         /// </summary>
