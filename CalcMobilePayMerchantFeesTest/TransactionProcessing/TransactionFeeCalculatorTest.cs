@@ -52,6 +52,27 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
         }
 
         [TestMethod]
+        public void TestCalculateTotalTransactionFeeShouldReturnCorrectValue()
+        {
+            var calculator = new TransactionFeeCalculator();
+
+            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 2, 1), MerchantName = "SEVEN-S", TransactionAmount = 0 };
+
+            var result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(0.00m);
+
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 3, 1), MerchantName = "SEVEN-S", TransactionAmount = 200 };
+
+            result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(31.00m);
+
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 3, 1), MerchantName = "SEVEN-S", TransactionAmount = 200 };
+
+            result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(2.00m);
+        }
+
+        [TestMethod]
         public void TestMerchantHasTransactionsForMonthShouldReturnCorrectValue()
         {
             var calculator = new TransactionFeeCalculator();

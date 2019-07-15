@@ -50,5 +50,26 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
             result = calculator.CalculateAdditionalFirstDayFee(transactionObject);
             result.ShouldBe(0.00m);
         }
+
+        [TestMethod]
+        public void TestCalculateTotalTransactionFeeShouldReturnCorrectValue()
+        {
+            var calculator = new TransactionFeeCalculatorTelia();
+
+            var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 4, 1), MerchantName = "Telia", TransactionAmount = 0 };
+
+            var result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(0.00m);
+
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 9, 1), MerchantName = "Telia", TransactionAmount = 200 };
+
+            result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(30.80m);
+
+            transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 9, 1), MerchantName = "Telia", TransactionAmount = 200 };
+
+            result = calculator.CalculateTotalTransactionFee(transactionObject);
+            result.ShouldBe(1.80m);
+        }
     }
 }
