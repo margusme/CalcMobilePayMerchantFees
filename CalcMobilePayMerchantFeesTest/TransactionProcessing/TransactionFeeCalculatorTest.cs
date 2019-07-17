@@ -14,7 +14,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
         {
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "SEVEN", TransactionAmount = 200 };
 
-            var calculator = new TransactionFeeCalculator();
+            var calculator = new TransactionFeeCalculatorChild();
 
             var result = calculator.CalculateTransactionFee(null);
             result.ShouldBe(0.00m);
@@ -30,7 +30,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
         [TestMethod]
         public void TestCalculateAdditionalFirstDayFeeShouldReturnCorrectValue()
         {
-            var calculator = new TransactionFeeCalculator();
+            var calculator = new TransactionFeeCalculatorChild();
 
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 2, 1), MerchantName = "SEVEN", TransactionAmount = 0 };
 
@@ -75,8 +75,6 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
         [TestMethod]
         public void TestMerchantHasTransactionsForMonthShouldReturnCorrectValue()
         {
-            var calculator = new TransactionFeeCalculator();
-
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 10, 1), MerchantName = "SEVEN", TransactionAmount = 0 };
 
             var result = TransactionFeeCalculatorChild.MerchantHasTransactionsForMonth(null);
@@ -95,6 +93,16 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing
         public new static bool MerchantHasTransactionsForMonth(TransactionObject transactionObject)
         {
             return TransactionFeeCalculator.MerchantHasTransactionsForMonth(transactionObject);
+        }
+
+        public new decimal CalculateTransactionFee(TransactionObject transactionObject)
+        {
+            return base.CalculateTransactionFee(transactionObject);
+        }
+
+        public new decimal CalculateAdditionalFirstDayFee(TransactionObject transactionObject)
+        {
+            return base.CalculateAdditionalFirstDayFee(transactionObject);
         }
     }
 }

@@ -16,11 +16,30 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         protected static HashSet<string> ClientMonthFirstOperations = new HashSet<string>();
 
         /// <summary>
+        /// Returns payment transaction fee with additional charges for the first merchant transaction in month. 
+        /// </summary>
+        /// <param name="transactionObject">Payment transaction object</param>
+        /// <returns>1/100 of the transaction amount plus additional charges</returns>
+        public virtual decimal CalculateTotalTransactionFee(TransactionObject transactionObject)
+        {
+            return CalculateTransactionFee(transactionObject) + CalculateAdditionalFirstDayFee(transactionObject);
+        }
+
+        /// <summary>
+        /// Gets merchant name. Empty for general/common payment transaction
+        /// </summary>
+        /// <returns>Empty</returns>
+        public virtual string GetMerchantName()
+        {
+            return MerchantName;
+        }
+
+        /// <summary>
         /// Returns payment transaction fee. 
         /// </summary>
         /// <param name="transactionObject">Payment transaction object</param>
         /// <returns>1/100 of the transaction amount multiplied by rate. If rate is 0.9 then it will give 10% of discount</returns>
-        public virtual decimal CalculateTransactionFee(TransactionObject transactionObject)
+        protected virtual decimal CalculateTransactionFee(TransactionObject transactionObject)
         {
             if (transactionObject == null)
             {
@@ -39,26 +58,15 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         /// </summary>
         /// <param name="transactionObject">Payment transaction object</param>
         /// <returns>Additional fee</returns>
-        public virtual decimal CalculateAdditionalFirstDayFee(TransactionObject transactionObject)
+        protected virtual decimal CalculateAdditionalFirstDayFee(TransactionObject transactionObject)
         {
             return !MerchantHasTransactionsForMonth(transactionObject) && CalculateTransactionFee(transactionObject) > 0 ? InvoiceFixedFee : 0.00m;
         }
 
         /// <summary>
-        /// Returns payment transaction fee with additional charges for the first merchant transaction in month. 
+        /// Returns payment transaction fee rate for discount. If discount is 0% then it will be 1.0
         /// </summary>
-        /// <param name="transactionObject">Payment transaction object</param>
-        /// <returns>1/100 of the transaction amount plus additional charges</returns>
-        public virtual decimal CalculateTotalTransactionFee(TransactionObject transactionObject)
-        {
-            return CalculateTransactionFee(transactionObject) + CalculateAdditionalFirstDayFee(transactionObject);
-        }
-
-        public virtual string GetMerchantName()
-        {
-            return MerchantName;
-        }
-
+        /// <returns>1.0</returns>
         protected virtual decimal GetFullTransactionFeeRate()
         {
             return 1.00m;
