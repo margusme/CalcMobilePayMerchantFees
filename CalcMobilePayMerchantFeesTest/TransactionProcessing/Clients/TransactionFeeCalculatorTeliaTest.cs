@@ -14,7 +14,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
         public void TestCalculateTransactionFeeShouldReturnCorrectValue()
         {
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "Telia", TransactionAmount = 200 };
-            var calculator = new TransactionFeeCalculatorTelia();
+            var calculator = new TransactionFeeCalculatorTeliaChild();
 
             var result = calculator.CalculateTransactionFee(null);
             result.ShouldBe(0.00m);
@@ -30,7 +30,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
         [TestMethod]
         public void TestCalculateAdditionalFirstDayFeeShouldReturnCorrectValue()
         {
-            var calculator = new TransactionFeeCalculatorTelia();
+            var calculator = new TransactionFeeCalculatorTeliaChild();
 
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 3, 1), MerchantName = "Telia", TransactionAmount = 0 };
 
@@ -70,6 +70,19 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
 
             result = calculator.CalculateTotalTransactionFee(transactionObject);
             result.ShouldBe(1.80m);
+        }
+    }
+
+    public class TransactionFeeCalculatorTeliaChild : TransactionFeeCalculatorTelia
+    {
+        public new decimal CalculateTransactionFee(TransactionObject transactionObject)
+        {
+            return base.CalculateTransactionFee(transactionObject);
+        }
+
+        public new decimal CalculateAdditionalFirstDayFee(TransactionObject transactionObject)
+        {
+            return base.CalculateAdditionalFirstDayFee(transactionObject);
         }
     }
 }
