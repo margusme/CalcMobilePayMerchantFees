@@ -14,7 +14,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
         public void TestCalculateTransactionFeeShouldReturnCorrectValue()
         {
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 1, 1), MerchantName = "Circle_K", TransactionAmount = 200 };
-            var calculator = new TransactionFeeCalculatorCircleK();
+            var calculator = new TransactionFeeCalculatorCircleKChild();
 
             var result = calculator.CalculateTransactionFee(null);
             result.ShouldBe(0.00m);
@@ -30,7 +30,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
         [TestMethod]
         public void TestCalculateAdditionalFirstDayFeeShouldReturnCorrectValue()
         {
-            var calculator = new TransactionFeeCalculatorCircleK();
+            var calculator = new TransactionFeeCalculatorCircleKChild();
 
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 4, 1), MerchantName = "Circle_K", TransactionAmount = 0 };
 
@@ -70,6 +70,19 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
 
             result = calculator.CalculateTotalTransactionFee(transactionObject);
             result.ShouldBe(1.60m);
+        }
+    }
+
+    public class TransactionFeeCalculatorCircleKChild : TransactionFeeCalculatorCircleK
+    {
+        public new decimal CalculateTransactionFee(TransactionObject transactionObject)
+        {
+            return base.CalculateTransactionFee(transactionObject);
+        }
+
+        public new decimal CalculateAdditionalFirstDayFee(TransactionObject transactionObject)
+        {
+            return base.CalculateAdditionalFirstDayFee(transactionObject);
         }
     }
 }
