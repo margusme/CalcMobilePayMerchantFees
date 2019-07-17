@@ -19,7 +19,7 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         /// Returns payment transaction fee. 
         /// </summary>
         /// <param name="transactionObject">Payment transaction object</param>
-        /// <returns>1/100 of the transaction amount</returns>
+        /// <returns>1/100 of the transaction amount multiplied by rate. If rate is 0.9 then it will give 10% of discount</returns>
         public virtual decimal CalculateTransactionFee(TransactionObject transactionObject)
         {
             if (transactionObject == null)
@@ -27,7 +27,7 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
                 return 0.00m;
             }
 
-            return Math.Round((decimal)transactionObject.TransactionAmount / 100, 2);
+            return Math.Round(transactionObject.TransactionAmount * GetFullTransactionFeeRate() / 100, 2);
         }
 
         /// <summary>
@@ -57,6 +57,11 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         public virtual string GetMerchantName()
         {
             return MerchantName;
+        }
+
+        protected virtual decimal GetFullTransactionFeeRate()
+        {
+            return 1.00m;
         }
 
         /// <summary>

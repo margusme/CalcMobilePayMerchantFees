@@ -8,25 +8,12 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
         public new static string MerchantName = "CIRCLE_K";
 
         /// <summary>
-        /// Returns payment transaction fee. 
+        /// Returns payment transaction fee rate for discount. If discount is 20% then it will be 0.8
         /// </summary>
-        /// <param name="transactionObject">Payment transaction object</param>
-        /// <returns>1/100 of transaction amount minus 20%</returns>
-        public override decimal CalculateTransactionFee(TransactionObject transactionObject)
+        /// <returns>0.8</returns>
+        protected override decimal GetFullTransactionFeeRate()
         {
-            var baseTransactionFee = base.CalculateTransactionFee(transactionObject);
-
-            return Math.Round(baseTransactionFee * 0.8m, 2);
-        }
-
-        /// <summary>
-        /// Returns payment transaction fee with additional charges for the first merchant transaction in month. 
-        /// </summary>
-        /// <param name="transactionObject">Payment transaction object</param>
-        /// <returns>1/100 of the transaction amount minus 20% plus additional charges</returns>
-        public override decimal CalculateTotalTransactionFee(TransactionObject transactionObject)
-        {
-            return CalculateTransactionFee(transactionObject) + CalculateAdditionalFirstDayFee(transactionObject);
+            return 0.8m;
         }
 
         /// <summary>
