@@ -54,7 +54,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
         [TestMethod]
         public void TestCalculateTotalTransactionFeeShouldReturnCorrectValue()
         {
-            var calculator = new TransactionFeeCalculatorTelia();
+            var calculator = TransactionFeeCalculator.Instance<TransactionFeeCalculatorTelia>();
 
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 4, 1), MerchantName = "Telia", TransactionAmount = 0 };
 
