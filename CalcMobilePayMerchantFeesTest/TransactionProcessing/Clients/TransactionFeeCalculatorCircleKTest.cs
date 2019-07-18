@@ -54,7 +54,7 @@ namespace CalcMobilePayMerchantFeesTest.TransactionProcessing.Clients
         [TestMethod]
         public void TestCalculateTotalTransactionFeeShouldReturnCorrectValue()
         {
-            var calculator = new TransactionFeeCalculatorCircleK();
+            var calculator = TransactionFeeCalculator.Instance<TransactionFeeCalculatorCircleK>();
 
             var transactionObject = new TransactionObject() { TransactionDate = new DateTime(2018, 5, 1), MerchantName = "Circle_K", TransactionAmount = 0 };
 

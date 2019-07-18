@@ -13,8 +13,31 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         /// <summary>
         /// Hold client-specific calculator objects
         /// </summary>
-        protected static readonly List<TransactionFeeCalculator> TransactionFeeClientCalculators = new List<TransactionFeeCalculator>() { new TransactionFeeCalculatorTelia(), new TransactionFeeCalculatorCircleK() };
-        protected static readonly TransactionFeeCalculator TypicalTransactionFeeCalculator = new TransactionFeeCalculator();
+        protected static readonly List<TransactionFeeCalculator> TransactionFeeMerchantCalculators = new List<TransactionFeeCalculator>() { TransactionFeeCalculator.Instance<TransactionFeeCalculatorTelia>(), TransactionFeeCalculator.Instance<TransactionFeeCalculatorCircleK>() };
+        protected static readonly TransactionFeeCalculator TypicalTransactionFeeCalculator = TransactionFeeCalculator.Instance();
+
+        /// <summary>
+        /// Method returns right transaction fee calculator classified by transaction object or null if transaction object is null
+        /// </summary>
+        /// <param name="transactionObject">Payment transaction object</param>
+        /// <returns>Transaction fee calculator or null</returns>
+        public static TransactionFeeCalculator GetRightTransactionFeeCalculator(TransactionObject transactionObject)
+        {
+            if (transactionObject == null)
+            {
+                return null;
+            }
+
+            foreach (var transactionFeeMerchantCalculator in TransactionFeeMerchantCalculators)
+            {
+                if (transactionFeeMerchantCalculator.GivenMerchantNameIsMyMerchantName(transactionObject.MerchantName))
+                {
+                    return transactionFeeMerchantCalculator;
+                }
+            }
+
+            return TypicalTransactionFeeCalculator;
+        }
 
         /// <summary>
         /// Method calculates payment transaction fee for the merchant
@@ -23,20 +46,14 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         /// <returns>Payment transaction fee for given merchant.</returns>
         public static decimal CalculateTransactionFeeByMerchant(TransactionObject transactionObject)
         {
-            if (transactionObject == null)
+            var transactionFeeCalculator = GetRightTransactionFeeCalculator(transactionObject);
+
+            if (transactionFeeCalculator == null)
             {
                 return 0;
             }
 
-            foreach (var transactionFeeClientCalculator in TransactionFeeClientCalculators)
-            {
-                if (transactionObject.MerchantName.ToUpper().Equals(transactionFeeClientCalculator.GetMerchantName()))
-                {
-                    return transactionFeeClientCalculator.CalculateTotalTransactionFee(transactionObject);
-                }
-            }
-
-            return TypicalTransactionFeeCalculator.CalculateTotalTransactionFee(transactionObject);
+            return transactionFeeCalculator.CalculateTotalTransactionFee(transactionObject);
         }
     }
 }
