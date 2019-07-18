@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using CalcMobilePayMerchantFees.Models;
 
@@ -15,6 +14,32 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
 
         protected static HashSet<string> ClientMonthFirstOperations = new HashSet<string>();
 
+        private static readonly Dictionary<string, TransactionFeeCalculator> Instances = new Dictionary<string, TransactionFeeCalculator>();
+
+        protected TransactionFeeCalculator()
+        {
+
+        }
+
+        /// <summary>
+        /// Gets instance of the current class
+        /// </summary>
+        /// <returns></returns>
+        public static TransactionFeeCalculator Instance()
+        {
+            return GetInstance<TransactionFeeCalculator>();
+        }
+
+        /// <summary>
+        /// Gets instance whether the current or any child classes
+        /// </summary>
+        /// <typeparam name="T">Type of the class</typeparam>
+        /// <returns>new instance of T</returns>
+        public static TransactionFeeCalculator Instance<T>() where T : TransactionFeeCalculator
+        {
+            return GetInstance<T>();
+        }
+
         /// <summary>
         /// Returns payment transaction fee with additional charges for the first merchant transaction in month. 
         /// </summary>
@@ -26,10 +51,37 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing
         }
 
         /// <summary>
+        /// Validates if given merchant name equals to calculator's merchant name
+        /// </summary>
+        /// <param name="merchantName"></param>
+        /// <returns></returns>
+        public bool GivenMerchantNameIsMyMerchantName(string merchantName)
+        {
+            return GetMerchantName().Trim().ToUpper().Equals(merchantName.Trim().ToUpper());
+        }
+
+        /// <summary>
+        /// Gets instance whether the current or any child classes
+        /// </summary>
+        /// <typeparam name="T">Type of the class</typeparam>
+        /// <returns>new instance of T</returns>
+        protected static TransactionFeeCalculator GetInstance<T>() where T : TransactionFeeCalculator
+        {
+            var type = typeof(T);
+
+            if (!Instances.ContainsKey(type.FullName))
+            {
+                Instances.TryAdd(type.FullName, (TransactionFeeCalculator)Activator.CreateInstance(type, true));
+            }
+
+            return Instances[type.FullName];
+        }
+
+        /// <summary>
         /// Gets merchant name. Empty for general/common payment transaction
         /// </summary>
         /// <returns>Empty</returns>
-        public virtual string GetMerchantName()
+        protected virtual string GetMerchantName()
         {
             return MerchantName;
         }

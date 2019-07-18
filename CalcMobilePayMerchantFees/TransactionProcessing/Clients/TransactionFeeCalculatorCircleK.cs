@@ -7,6 +7,11 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
     {
         public new static string MerchantName = "CIRCLE_K";
 
+        protected TransactionFeeCalculatorCircleK() : base()
+        {
+
+        }
+
         /// <summary>
         /// Returns payment transaction fee rate for discount. If discount is 20% then it will be 0.8
         /// </summary>
@@ -20,7 +25,7 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
         /// Gets merchant name from static constant
         /// </summary>
         /// <returns></returns>
-        public override string GetMerchantName()
+        protected override string GetMerchantName()
         {
             return MerchantName;
         }

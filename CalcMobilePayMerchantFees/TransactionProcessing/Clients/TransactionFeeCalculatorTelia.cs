@@ -7,6 +7,11 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
     {
         public new static string MerchantName = "TELIA";
 
+        protected TransactionFeeCalculatorTelia() : base()
+        {
+
+        }
+
         /// <summary>
         /// Returns payment transaction fee rate for discount. If discount is 10% then it will be 0.9
         /// </summary>
@@ -20,7 +25,7 @@ namespace CalcMobilePayMerchantFees.TransactionProcessing.Clients
         /// Gets merchant name from static constant
         /// </summary>
         /// <returns></returns>
-        public override string GetMerchantName()
+        protected override string GetMerchantName()
         {
             return MerchantName;
         }
